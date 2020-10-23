@@ -6,18 +6,31 @@ const fs = require("fs");
 // Sets up the Express App
 const app = express();
 const PORT = 8080;
+const mainDir = path.join(__dirname, "/public");
 
 // Sets up the Express app to handle data parsing
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 
 // Routes to HTML Files
 app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname, "..", "..", "index.html"));
+    res.sendFile(path.join(mainDir, "index.html"));
 });
 
 app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "..", "..", "notes.html"));
+    res.sendFile(path.join(mainDir, "notes.html"));
+});
+
+// Routes to GET and POST notes 
+app.get("/api/notes", function(req, res) {
+    fs.readFile(dbFilePath, "utf8", function(error, data) {
+        if (error) throw error;
+        
+        const notes = JSON.parse(data);
+    });
+
+    console.log(res.json(notes));
 });
 
 // Starts the server to begin listening
