@@ -22,15 +22,9 @@ app.get("/notes", function(req, res) {
     res.sendFile(path.join(mainDir, "notes.html"));
 });
 
-// Routes to GET and POST notes 
+// Route to GET saved notes 
 app.get("/api/notes", function(req, res) {
-    fs.readFile(dbFilePath, "utf8", function(error, data) {
-        if (error) throw error;
-        
-        const notes = JSON.parse(data);
-    });
-
-    console.log(res.json(notes));
+    res.sendFile(path.join(__dirname, "/db/db.json"));
 });
 
 // Starts the server to begin listening
