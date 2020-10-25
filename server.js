@@ -37,8 +37,13 @@ app.post("/api/notes", function (req, res) {
         let savedNotes = JSON.parse(data);
         console.log(savedNotes);
 
+        // User input for new note object
         let newNote = req.body;
         console.log(newNote);
+
+        // Adds unique id to saved notes
+        // ??? This doesn't add id to prior saved notes ???
+        newNote.id = (savedNotes.length);
 
         savedNotes.push(newNote);
 
