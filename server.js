@@ -22,7 +22,7 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(mainDir, "notes.html"));
 });
 
-// Routes to GET and POST saved notes 
+// Routes to GET, POST and DELETE notes 
 app.get("/api/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "/db/db.json"));
 });
@@ -43,7 +43,7 @@ app.post("/api/notes", function (req, res) {
 
         // Adds unique id to saved notes
         // ??? This doesn't add id to prior saved notes ???
-        newNote.id = (savedNotes.length);
+        newNote.id = (savedNotes.length).toString();
 
         savedNotes.push(newNote);
 
@@ -59,6 +59,28 @@ app.post("/api/notes", function (req, res) {
 
 
     });
+
+});
+
+app.delete("/api/notes/:id", function (req, res) {
+    let id = req.params.id;
+    console.log(id);
+
+    let savedData = fs.readFileSync("./db/db.json", "utf8");
+    let savedNotes = JSON.parse(savedData);
+
+    savedNotes.splice(id, 1);
+    console.log(savedNotes);
+
+    savedNotes = JSON.stringify(savedNotes);
+
+    // create writeFile function to save new array of saved notes  
+    fs.writeFile("./db/db.json", savedNotes, "utf8", (err) => {
+        if (err) throw err;
+        console.log("Note deleted from file");
+    });
+
+    res.send(JSON.parse(savedNotes));
 
 });
 
