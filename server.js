@@ -23,6 +23,10 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(mainDir, "notes.html"));
 });
 
+app.get("*", function (req, res) {
+    res.sendFile(path.join(mainDir, "index.html"));
+});
+
 // Routes to GET, POST and DELETE notes 
 app.get("/api/notes", function (req, res) {
     let notes = require("./db/db.json");
