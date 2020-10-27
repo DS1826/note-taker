@@ -2,6 +2,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const uuid = require("uuid/v1");
 
 // Sets up the Express App
 const app = express();
@@ -24,40 +25,33 @@ app.get("/notes", function (req, res) {
 
 // Routes to GET, POST and DELETE notes 
 app.get("/api/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "/db/db.json"));
+    let notes = require("./db/db.json");
+    res.json(notes);
 });
-
-// const savedNotes = fs.readFileSync("./db/db.json").toString();
-// console.log(savedNotes);
 
 app.post("/api/notes", function (req, res) {
     // creates const to parse JSON file
-    let savedData = fs.readFile("./db/db.json", (err, data) => {
+    let savedNotes = require("./db/db.json");
+
+    console.log(savedNotes);
+
+    // User input for new note object
+    let newNote = req.body;
+    console.log(newNote);
+
+    // Adds unique id to saved notes
+    newNote.id = uuid();
+
+    savedNotes.push(newNote);
+
+    savedNotes = JSON.stringify(savedNotes);
+
+    // create writeFile function to save new notes  
+    fs.writeFile("./db/db.json", savedNotes, "utf8", (err) => {
         if (err) throw err;
-        let savedNotes = JSON.parse(data);
-        console.log(savedNotes);
-
-        // User input for new note object
-        let newNote = req.body;
-        console.log(newNote);
-
-        // Adds unique id to saved notes
-        // ??? This doesn't add id to prior saved notes ???
-        newNote.id = (savedNotes.length).toString();
-
-        savedNotes.push(newNote);
-
-        savedNotes = JSON.stringify(savedNotes);
-
-        // create writeFile function to save new notes  
-        fs.writeFile("./db/db.json", savedNotes, "utf8", (err) => {
-            if (err) throw err;
-            console.log("New Note written to file");
-        });
+        console.log("New Note written to file");
 
         res.json(JSON.parse(savedNotes));
-
-
     });
 
 });
@@ -66,12 +60,15 @@ app.delete("/api/notes/:id", function (req, res) {
     let id = req.params.id;
     console.log(id);
 
-    let savedData = fs.readFileSync("./db/db.json", "utf8");
-    let savedNotes = JSON.parse(savedData);
+    let savedNotes = require("./db/db.json");
 
-    savedNotes.splice(id, 1);
-    console.log(savedNotes);
-
+    for (let i = 0; i < savedNotes.length; i++) {
+        if (id === savedNotes[i].id) {
+            savedNotes.splice(i, 1);
+            console.log(savedNotes);
+        }
+    }
+    
     savedNotes = JSON.stringify(savedNotes);
 
     // create writeFile function to save new array of saved notes  
