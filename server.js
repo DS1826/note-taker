@@ -6,7 +6,7 @@ const uuid = require("uuid/v1");
 
 // Sets up the Express App
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const mainDir = path.join(__dirname, "/public");
 
 // Sets up the Express app to handle data parsing
@@ -68,7 +68,7 @@ app.delete("/api/notes/:id", function (req, res) {
             console.log(savedNotes);
         }
     }
-    
+
     savedNotes = JSON.stringify(savedNotes);
 
     // create writeFile function to save new array of saved notes  
