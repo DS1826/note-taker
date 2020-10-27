@@ -23,18 +23,13 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(mainDir, "notes.html"));
 });
 
-app.get("*", function (req, res) {
-    res.sendFile(path.join(mainDir, "index.html"));
-});
-
 // Routes to GET, POST and DELETE notes 
 app.get("/api/notes", function (req, res) {
-    let notes = require("./db/db.json");
-    res.json(notes);
+    let savedNotes = require("./db/db.json");
+    res.json(savedNotes);
 });
 
 app.post("/api/notes", function (req, res) {
-    // creates const to parse JSON file
     let savedNotes = require("./db/db.json");
 
     console.log(savedNotes);
@@ -83,6 +78,11 @@ app.delete("/api/notes/:id", function (req, res) {
 
     res.send(JSON.parse(savedNotes));
 
+});
+
+// Route to home page if any other route entered
+app.get("*", function (req, res) {
+    res.sendFile(path.join(mainDir, "index.html"));
 });
 
 // Starts the server to begin listening
