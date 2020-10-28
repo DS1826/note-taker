@@ -8,7 +8,7 @@ This application can be used to write, save and delete notes. This application u
 <img width="843" alt="Screen Shot 2020-10-27 at 5 52 08 PM" src="https://user-images.githubusercontent.com/67653440/97366189-430f8000-187d-11eb-9bad-f9ba57f549e3.png">
 
 ## Installation
-This application is deployed on Heroku at the following link: 
+This application is deployed on Heroku at the following link: https://calm-garden-07244.herokuapp.com/
 
 ## Technologies
 * HTML
